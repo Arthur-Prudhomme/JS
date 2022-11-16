@@ -1,0 +1,22 @@
+body{
+    background-color: rgb(30, 30, 30);
+    color: white;
+}
+
+#hidden{
+    display: none;
+}
+
+#matches {
+    width:5px;
+    height:100px;
+    background:white;
+    margin: 15px;
+    display: flex;
+}
+
+#matchesContainer{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
