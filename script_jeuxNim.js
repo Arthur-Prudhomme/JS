@@ -1,41 +1,103 @@
-let matchesTotal
+let matchesTotal = getElementWithId("gameLenght")
+let nextMove = getElementWithId("nextMove")
 let matchesCurrent
+let player
+
+matchesTotal.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("gameLenghtButton").click();
+    }
+});
+
+nextMove.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("confirmNextMove").click();
+    }
+});
 
 function containsOnlyNumbers(str) {
     return /^\d+$/.test(str);
 }
 
+function getElementWithId(id){
+    return document.getElementById(id)
+}
+
 function getInput(){
-    let matchesTotal = document.getElementById("gameLenght").value;
-    if(containsOnlyNumbers(matchesTotal) === true){
-        parseInt(matchesTotal);
-        if(matchesTotal < 1){
-            document.getElementById("totalMatchesOutput").innerHTML = "Veuillez entrer un nombre supérieur à 0";
+    let matchesTotalValue = matchesTotal.value;
+    console.log(matchesTotalValue)
+    if(containsOnlyNumbers(matchesTotalValue) === true){
+        parseInt(matchesTotalValue);
+        if(matchesTotalValue < 1){
+            getElementWithId("totalMatchesOutput").innerHTML = "Veuillez entrer un nombre supérieur à 0";
         }else{
-            document.getElementById("nextMove").type = 'number';
-            document.getElementById("confirmNextMove").hidden = '';
+            player = 1
 
-            matchesCurrent = matchesTotal;
+            nextMove.type = 'number';
+            nextMove.value = 0;
 
-            document.getElementById("totalMatchesOutput").innerHTML = "Taille de la partie : " + matchesTotal + " allumettes";
-            document.getElementById("currentMatchesOutput").innerHTML = "Nombre restant : " + matchesTotal + " allumettes";
+            getElementWithId("confirmNextMove").hidden = '';
+
+            matchesCurrent = matchesTotalValue;
+
+            getElementWithId("totalMatchesOutput").innerHTML = "Taille de la partie : " + matchesTotalValue + " allumettes";
+            getElementWithId("currentMatchesOutput").innerHTML = "Nombre restant : " + matchesCurrent + " allumettes";
 
             createMatches(matchesCurrent);
+            getElementWithId("playerTurn").innerHTML = "C'est à Joueur " + player
         }
     }else{
-        document.getElementById("totalMatchesOutput").innerHTML = "Veuillez entrer un nombre";
+        getElementWithId("totalMatchesOutput").innerHTML = "Veuillez entrer un nombre";
     }
 }
 
-function createMatches(int){
-    let container = document.getElementById("matchesContainer");
+function createMatches(number){
+    let container = getElementWithId("matchesContainer");
     let check = document.querySelectorAll(`[id="matches"]`);
     if(check){
-        check.forEach(content => content.remove())
+        check.forEach(element => element.remove())
     }
-    for(i = int; i > 0; i--){
+    for(i = number; i > 0; i--){
         let box = document.createElement("div");
         box.id = "matches";
         container.appendChild(box);
+    }
+}
+
+function removeMatches(){
+    let number = nextMove.value;
+    if(containsOnlyNumbers(number) === true){
+        parseInt(number);
+        if(number > 0 && number < 4){
+            getElementWithId("inputError").innerHTML = '';
+            matchesCurrent -= number;
+            if(matchesCurrent <= 0){
+                let destroy = document.querySelectorAll(`[id="matches"]`);
+                matchesCurrent = 0
+                if(destroy){
+                    destroy.forEach(element => element.remove())
+                }
+                getElementWithId("playerTurn").innerHTML = "Joueur " + player + " a perdu"
+            }else{
+                for(i = number; i > 0; i--){
+                    getElementWithId('matches').remove()
+                }
+                turns()
+                getElementWithId("playerTurn").innerHTML = "C'est à Joueur " + player
+            }
+            getElementWithId("currentMatchesOutput").innerHTML = "Nombre restant : " + matchesCurrent + " allumettes";
+        }else{
+            getElementWithId("inputError").innerHTML = 'Veuillez entrer un nombre compris entre 0 et 3';
+        }
+    }
+}
+
+function turns(){
+    if(player == 1){
+        player = 2
+    }else{
+        player = 1
     }
 }

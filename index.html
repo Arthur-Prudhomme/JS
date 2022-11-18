@@ -10,17 +10,20 @@
 
 <body>
     <input type="number" id="gameLenght">
-    <button type="button" onclick="getInput()">Définir</button>
+    <button type="button" onclick="getInput()" id="gameLenghtButton">Définir</button>
 
     <p id="totalMatchesOutput"></p>
     <p id="currentMatchesOutput"></p>
 
     <input type="hidden" id="nextMove">
-    <button type="hidden" onclick="getMove()" id="confirmNextMove" hidden="hidden">Valider</button>
+    <button type="hidden" onclick="removeMatches()" id="confirmNextMove" hidden="hidden">Valider</button>
 
-    <div id="matchesContainer">
+    <p id="inputError"></p>
+    <p id="playerTurn"></p>
 
-    </div>
+    <div id="matchesContainer"></div>
+
+    <div></div>
 
     <script src="script_jeuxNim.js"></script>
 </body>
